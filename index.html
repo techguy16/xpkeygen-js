@@ -1,7 +1,57 @@
 <html>
 
 <head>
-<title>JavaScript ECC demo (Windows XP VLK Generator)</title>
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/xp.css"
+>
+<title>XPKeygen JS</title>
+<style>
+    * {
+        font-family: sans-serif;
+    }
+    #button {
+        padding:14px 19px;
+        border-radius:10px;
+        background-color:limegreen;
+        color:white;
+        font-size:15px;
+        border:none;
+    }
+    #button:hover {
+        background-color:lightgreen;
+    }
+    #key {
+        text-align:center;
+        border:none;
+        font-size:25px;
+        font-family:monospace;
+    }
+    h1 {
+        font-family:"Verdana", sans-serif;
+        font-weight:normal;
+    }
+    #box {
+        border-radius:10px 10px 0px 0px;
+        width:600px;
+        height:125px;
+        margin:0;
+        resize: both;
+        overflow: auto;
+    }
+    #titlebar {
+        margin-top:-20px;
+        background:blue;
+        color:white;
+        height:40px;
+        border-radius:10px 10px 0px 0px;
+        text-align:left;
+    }
+    #ttext {
+        padding-top:10px;
+        margin-left:10px;
+    }
+</style>
 </head>
 
 <script language="JavaScript" type="text/javascript" src="jsbn.js"> </script>
@@ -205,18 +255,21 @@ function generate() {
  
 </script>
 
-<body>
-<h2>JavaScript Elliptic Curve Crypto Demo<h2>
-<h3>Windows XP VLK Generator</h3>
+<body onload='do_generate()'>
+    <center>
+        <div id='box'>
+<h1>XPKeygen JS</h1>
+<p>Windows XP VLK Key Generator</p>
 
-<input type="button" value="Generate" onClick="do_generate();"/>
-<input type="text" size="30" id="key" /><br>
-<font size="-1">some generated keys may be invalid</font>
-
-<tt>
-<div id="msg">
+</center>
+<br><br>
 </div>
-</tt>
+<center>
+<input type="text" size="30" id="key" />
+<br><br>
+<input type="button" value="Regenerate" onClick="do_generate();" id='button'/><br>
+<br>
+</center>
 
 <script type="text/javascript">
 
@@ -229,12 +282,49 @@ function do_generate() {
 	key.value = generate();
 }
 
-</script>
+dragElement(document.getElementById("box"));
 
-<br>
-<hr>
-<a href = "http://winsupport.co.cc/downloads/Other/tmp/xpkey-0.03.cpp.txt">Original C code</a><br>
-<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Big Integer and SHA-1 library</a>
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "titlebar")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "titlebar").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+e = e || window.event;
+e.preventDefault();
+    // get the mouse cursor position at startup:
+pos3 = e.clientX;
+pos4 = e.clientY;
+document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+pos1 = pos3 - e.clientX;
+pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+pos4 = e.clientY;
+    // set the element's new position:
+elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+document.onmousemove = null;
+  }
+}
+</script>
 
 </body>
 
